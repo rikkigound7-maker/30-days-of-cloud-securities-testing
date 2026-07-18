@@ -1,0 +1,31 @@
+# Day 01 — Public S3 Bucket Enumeration & Data Exposure
+
+**Series:** 30 Days of Cloud Security
+**Category:** Week 1 · Storage Misconfigurations
+**Provider:** AWS
+
+## 📝 Summary
+Public S3 buckets remain one of the most common cloud misconfigurations. When a bucket's ACL or bucket policy allows public listing/read access, attackers can enumerate bucket names, list objects, and pull sensitive data — backups, logs, credentials, customer PII — without any authentication.
+
+## 🔍 Technique
+1. Bucket name guessing / brute-forcing using common naming patterns (`company-backup`, `company-prod`, `company-assets`, etc.)
+2. Passive recon via search engines, GitHub, and certificate transparency logs for leaked bucket names
+3. Checking public access via direct HTTP request or CLI:
+   ```
+   aws s3 ls s3://<bucket-name> --no-sign-request
+   ```
+4. Tools: `S3Scanner`, `Grayhat Warfare`, `bucket_finder`, `lazys3`
+
+## 🛠️ Fix
+- Enable **S3 Block Public Access** at the account and bucket level
+- Set bucket ACLs to private; avoid `AllUsers` / `AuthenticatedUsers` grants
+- Use bucket policies with explicit deny for public access
+- Enable **AWS Config** rule `s3-bucket-public-read-prohibited` for continuous monitoring
+- Audit with **AWS Trusted Advisor** or **ScoutSuite**
+
+## 📦 Deliverables
+- [ ] Card image (1200×628 PNG) — dot grid + dark terminal block + two-column layout
+- [ ] LinkedIn post — short, technical, ends with a question + hashtags
+
+## 🏷️ Hashtags
+`#CloudSecurity` `#AWS` `#S3` `#CyberSecurity` `#DevSecOps` `#InfoSec`
