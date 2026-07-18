@@ -1,31 +1,34 @@
-# Day 01 — Public S3 Bucket Enumeration & Data Exposure
+# 🔐 30 Days of Cloud Security — Day 01
 
-**Series:** 30 Days of Cloud Security
-**Category:** Week 1 · Storage Misconfigurations
-**Provider:** AWS
+## Public S3 Bucket Enumeration & Data Exposure
 
-## 📝 Summary
-Public S3 buckets remain one of the most common cloud misconfigurations. When a bucket's ACL or bucket policy allows public listing/read access, attackers can enumerate bucket names, list objects, and pull sensitive data — backups, logs, credentials, customer PII — without any authentication.
+---
 
-## 🔍 Technique
-1. Bucket name guessing / brute-forcing using common naming patterns (`company-backup`, `company-prod`, `company-assets`, etc.)
-2. Passive recon via search engines, GitHub, and certificate transparency logs for leaked bucket names
-3. Checking public access via direct HTTP request or CLI:
-   ```
-   aws s3 ls s3://<bucket-name> --no-sign-request
-   ```
-4. Tools: `S3Scanner`, `Grayhat Warfare`, `bucket_finder`, `lazys3`
+Most companies think their S3 buckets are private.
 
-## 🛠️ Fix
-- Enable **S3 Block Public Access** at the account and bucket level
-- Set bucket ACLs to private; avoid `AllUsers` / `AuthenticatedUsers` grants
-- Use bucket policies with explicit deny for public access
-- Enable **AWS Config** rule `s3-bucket-public-read-prohibited` for continuous monitoring
-- Audit with **AWS Trusted Advisor** or **ScoutSuite**
+Most of them are wrong.
 
-## 📦 Deliverables
-- [ ] Card image (1200×628 PNG) — dot grid + dark terminal block + two-column layout
-- [ ] LinkedIn post — short, technical, ends with a question + hashtags
+One misconfigured ACL, one public bucket policy — and your backups, logs, and customer data are sitting there for anyone to `ls`.
 
-## 🏷️ Hashtags
-`#CloudSecurity` `#AWS` `#S3` `#CyberSecurity` `#DevSecOps` `#InfoSec`
+```bash
+aws s3 ls s3://<bucket-name> --no-sign-request
+```
+
+That's it. No auth. No exploit. Just a name and a request.
+
+**How attackers find these buckets:**
+→ Guessing common naming patterns (`company-backup`, `company-prod`, `company-assets`)
+→ Scraping GitHub, search engines, and cert transparency logs for leaked names
+→ Automated tools — S3Scanner, bucket_finder, lazys3
+
+**How to fix it:**
+→ Enable S3 Block Public Access at the account level
+→ Kill `AllUsers` / `AuthenticatedUsers` grants in your ACLs
+→ Turn on AWS Config rule `s3-bucket-public-read-prohibited`
+→ Run ScoutSuite or Trusted Advisor regularly
+
+One `ls` command shouldn't be able to expose your entire data estate.
+
+Have you ever audited your S3 buckets for public access?
+
+#CloudSecurity #AWS #S3 #CyberSecurity #DevSecOps #InfoSec
